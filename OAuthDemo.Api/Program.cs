@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Google;
+
 namespace OAuthDemo.Api;
 
 public class Program
@@ -10,6 +12,18 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = "Cookies";
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        })
+        .AddCookie()
+        .AddGoogle(googleOptions =>
+        {
+            googleOptions.ClientId = "your-client-id";
+            googleOptions.ClientSecret = "your-client-secret";
+        });
+
         var app = builder.Build();
         
         if (app.Environment.IsDevelopment())
@@ -19,6 +33,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
         app.Run();
