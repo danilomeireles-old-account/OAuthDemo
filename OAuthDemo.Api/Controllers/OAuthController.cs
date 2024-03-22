@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
-namespace OAuthDemo.Api.Controllers
+namespace OAuthDemo.Api.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class OAuthController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class OAuthController : ControllerBase
+    [HttpGet("login")]
+    public IActionResult Login()
     {
-        [HttpGet("login")]
-        public IActionResult Login()
-        {
-            return Challenge(new AuthenticationProperties { RedirectUri = "/" }, GoogleDefaults.AuthenticationScheme);
-        }
+        var authenticationProperties = new AuthenticationProperties { RedirectUri = "/" };
+        return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
     }
 }
